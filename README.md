@@ -1,8 +1,8 @@
-# GridPicker
+# GridPicker (Time Blocks)
 
 ## Time select by range
 
-## Time picker in blocks
+## Time pick in blocks
 
 
 ### props supported
