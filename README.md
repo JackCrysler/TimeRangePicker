@@ -6,6 +6,7 @@
 
 
 ### props supported
+```
 timeRange: {
   type: Array,
   default() {
@@ -48,3 +49,4 @@ value: {
     return [];
   },
 },
+```
