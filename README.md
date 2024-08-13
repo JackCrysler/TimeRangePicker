@@ -1,9 +1,10 @@
 # GridPicker (Time Blocks)
 
 ## Time select by range
+![image](https://github.com/user-attachments/assets/1314921e-f664-4d06-804e-655b115bdce9)
 
 ## Time pick in blocks
-
+![image](https://github.com/user-attachments/assets/4bf10673-b3c8-4683-b9b8-6fce2cae6fb0)
 
 ### props supported
 ```
@@ -50,6 +51,5 @@ value: {
   },
 },
 ```
-![image](https://github.com/user-attachments/assets/4bf10673-b3c8-4683-b9b8-6fce2cae6fb0)
 
 
