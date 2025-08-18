@@ -1,4 +1,4 @@
-# GridPicker (Time Blocks)
+# GridPicker (Time Blocks) uni-app
 
 ## Time select by range
 ![image](https://github.com/user-attachments/assets/1314921e-f664-4d06-804e-655b115bdce9)
