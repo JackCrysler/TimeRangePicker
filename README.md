@@ -51,5 +51,11 @@ value: {
   },
 },
 ```
+### event supported
 
+```
+emits:['change']
 
+how to use:
+<GridTimePicker @change = (selectedValue) => console.log(selectedValue) />
+```
