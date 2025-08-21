@@ -57,5 +57,5 @@ value: {
 emits:['change']
 
 how to use:
-<GridTimePicker :value="['08:00:00', '17:00:00']" @change = (selectedValue) => console.log(selectedValue) />
+<GridTimePicker :value="['08:00:00', '17:00:00']" @change="(selectedValue) => console.log(selectedValue)" />
 ```
