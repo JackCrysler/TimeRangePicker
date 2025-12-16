@@ -1,7 +1,7 @@
 <template>
-  <view class="grid-time-picker">
-    <view><slot name="header"></slot></view>
-    <view class="time-grid">
+  <div class="grid-time-picker">
+    <div><slot name="header"></slot></div>
+    <div class="time-grid">
       <TimeColumn
         v-for="(col, idx) in columns"
         :divide="divide"
@@ -12,13 +12,13 @@
         @block-click="updatePicker"
         @colInfo="collectColumns"
       ></TimeColumn>
-    </view>
-    <view><slot name="footer"></slot></view>
-  </view>
+    </div>
+    <div><slot name="footer"></slot></div>
+  </div>
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed } from "vue";
 import TimeColumn from "./TimeColumn.vue";
 export default {
   components: {
@@ -96,28 +96,28 @@ export default {
     },
     disabledBlocks() {
       if (Array.isArray(this.disabledRanges) && this.disabledRanges.length) {
-        const ret =  this.disabledRanges.map(({from, to}) => {
+        const ret = this.disabledRanges.map(({ from, to }) => {
           return this.rangeToList(this.getBlocksFromRange([from, to]));
-        })
-        return ret
+        });
+        return ret;
       }
-      return []
+      return [];
     },
   },
   watch: {
     value: {
       handler(cur) {
-        if (this.value.filter(it => it).length === 2) {
+        if (this.value.filter((it) => it).length === 2) {
           const initBlocks = this.getBlocksFromRange(this.value);
           this.selected = initBlocks;
           this.current = initBlocks[Math.floor(initBlocks.length / 2)];
           const renderMsg = this.generateRender(initBlocks);
           this.broadcast("update", renderMsg);
         } else {
-          this.reset()
+          this.reset();
         }
       },
-      immediate: true
+      immediate: true,
     },
   },
   methods: {
@@ -175,15 +175,20 @@ export default {
       const end = blocks[1] || totalBlocks;
       const left = end - dValue + 1;
       const right = start + dValue - 1;
-      const border = [left < 0 ? 0 : left, right > totalBlocks ? totalBlocks : right];
-      const ret = this.disabledBlocks.length ? this.breakBorder(border) : border;
+      const border = [
+        left < 0 ? 0 : left,
+        right > totalBlocks ? totalBlocks : right,
+      ];
+      const ret = this.disabledBlocks.length
+        ? this.breakBorder(border)
+        : border;
       return ret;
     },
     breakBorder(selectable) {
       const disabledBks2D = [...this.disabledBlocks];
       const selectableBks = this.rangeToList(selectable);
       const currentSN = this.current;
-      
+
       const f = (disabledBks) => {
         const dbksLen = disabledBks.length;
         if (
@@ -198,15 +203,21 @@ export default {
             return [disabledBks[dbksLen - 1] + 1, selectable[1]];
           }
         }
-      }
+      };
 
-      const fragments = disabledBks2D.map(it => f(it)).filter(it => it).map(it=> this.rangeToList(it));
+      const fragments = disabledBks2D
+        .map((it) => f(it))
+        .filter((it) => it)
+        .map((it) => this.rangeToList(it));
       if (fragments.length) {
-        const o = (arr1, arr2) => arr1.filter(item => arr2.includes(item));
-        const overlaped = fragments.reduce((prev, next) => prev.length === 0 ? next : o(next, prev), [])
+        const o = (arr1, arr2) => arr1.filter((item) => arr2.includes(item));
+        const overlaped = fragments.reduce(
+          (prev, next) => (prev.length === 0 ? next : o(next, prev)),
+          []
+        );
         const ret = [overlaped[0], overlaped.pop()];
         // console.log('overlaped range', ret)
-        return ret
+        return ret;
       }
       return selectable;
     },
@@ -239,7 +250,10 @@ export default {
       const renderMsg = this.generateRender(blocks);
       this.broadcast("update", renderMsg);
 
-      const pickerValue = blocks.length === 2 ? [this.SNs[blocks[0]][0], this.SNs[blocks[1]][1]] : [];
+      const pickerValue =
+        blocks.length === 2
+          ? [this.SNs[blocks[0]][0], this.SNs[blocks[1]][1]]
+          : [];
       this.$emit("change", pickerValue);
     },
     rangeToList(range, cb) {
@@ -270,7 +284,8 @@ export default {
       const [hour, minute, second] = from.split(":");
       const [toHour, toMinute, toSecond] = to.split(":");
       const diffSeconds =
-        this.toSeconds(toHour, toMinute, toSecond) - this.toSeconds(hour, minute, second);
+        this.toSeconds(toHour, toMinute, toSecond) -
+        this.toSeconds(hour, minute, second);
       return this.fromSeconds(diffSeconds);
     },
     toSeconds(hours, minutes, seconds) {
@@ -289,12 +304,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .grid-time-picker {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: 0;
+  width: 100%;
 }
 .time-grid {
   position: relative;
@@ -304,13 +319,13 @@ export default {
   gap: 8px;
 
   overflow: auto;
-  .cover {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-  }
+}
+.cover {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
 }
 </style>

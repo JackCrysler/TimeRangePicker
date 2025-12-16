@@ -1,9 +1,9 @@
 <template>
-  <view
+  <div
     class="time-block"
     :class="['disabled', 'default', 'active'][pattern]"
     @click="pattern && emit('click', [colNumber, gridNumber])"
-  ></view>
+  ></div>
 </template>
 
 <script setup>
@@ -54,7 +54,7 @@ eventBus.listen("update", (renderMsg) => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .time-block {
   width: 48px;
   height: 25px;

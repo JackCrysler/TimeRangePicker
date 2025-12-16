@@ -1,6 +1,6 @@
 <template>
-  <view class="time-column">
-    <view class="plain">{{ displayTime }}</view>
+  <div class="time-column">
+    <div class="plain">{{ displayTime }}</div>
     <TimeBlock
       v-for="(x, y) in columnInfo"
       :col-number="colNumber"
@@ -10,7 +10,7 @@
       :sn="x.sn"
       @click="(position) => handleClick(position, x.sn)"
     />
-  </view>
+  </div>
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
   components: {
     TimeBlock,
   },
-  emits: ["update"],
+  emits: ["update", "colInfo"],
   props: {
     divide: {
       type: Number,
@@ -98,7 +98,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .time-column {
   display: flex;
   flex-direction: column;
