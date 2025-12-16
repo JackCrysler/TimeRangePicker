@@ -60,26 +60,28 @@ eventBus.listen("update", (renderMsg) => {
   height: 25px;
   text-align: center;
   line-height: 25px;
+  cursor: pointer;
 }
 .time-block.default {
-  background-color: #cedceb;
+  background-color: #e3f2fd;
 }
 .time-block.active {
-  background-color: #008bd6;
+  background-color: #2196f3;
 }
 .time-block.disabled {
+  cursor: not-allowed;
   background-image: linear-gradient(
     -45deg,
-    #f2f2f2,
-    #f2f2f2 40%,
-    #e8e8e8 0,
-    #e8e8e8 50%,
-    #f2f2f2 0,
-    #f2f2f2 90%,
-    #e8e8e8 0,
-    #e8e8e8
+    #f5f5f5,
+    #f5f5f5 40%,
+    #e0e0e0 0,
+    #e0e0e0 50%,
+    #f5f5f5 0,
+    #f5f5f5 90%,
+    #e0e0e0 0,
+    #e0e0e0
   );
-  background-size: 4px 4px;
+  background-size: 6px 6px;
   background-repeat: repeat;
 }
 </style>

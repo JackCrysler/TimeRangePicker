@@ -1,10 +1,11 @@
-# GridPicker (Time Blocks) uni-app
+# GridPicker (Time Blocks) 
 
-## Time select by range
-![image](https://github.com/user-attachments/assets/1314921e-f664-4d06-804e-655b115bdce9)
+## Time select by time range
+![image](public/screenshot.png)
 
-## Time pick in blocks
-![image](https://github.com/user-attachments/assets/4bf10673-b3c8-4683-b9b8-6fce2cae6fb0)
+![image](public/screenshot2.png)
+
+![image](public/screenshot3.png)
 
 ### props supported
 ```
@@ -51,11 +52,13 @@ value: {
   },
 },
 ```
-### event supported
+### how to use
 
 ```
-emits:['change']
-
-how to use:
-<GridTimePicker :value="['08:00:00', '17:00:00']" @change="(selectedValue) => console.log(selectedValue)" />
+<GridTimePicker
+  :value="['14:00:00', '16:00:00']"
+  :timeRange="['08:00:00', '19:00:00']"
+  :disabledRanges="[{from: '10:00:00', to: '12:00:00'}]"
+  @change="(selectedValue) => console.log(selectedValue)" 
+/>
 ```
