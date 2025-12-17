@@ -12,7 +12,7 @@
 timeRange: {
   type: Array,
   default() {
-    // example(when unit === 'hour')
+    //  example(unit === 'hour')
     return ["08:00:00", "20:00:00"];
   },
 },
@@ -26,14 +26,14 @@ disabledRanges: {
 limit: {
   type: Number,
   default() {
-    // selectable value range by unit
+    // selectable range by unit
     return 2;
   },
 },
 unit: {
   type: String,
   default() {
-    // unit ['week', 'day', 'minute', ...] to be supported!
+    // ['hour'] supported currently, ['week', 'day', 'minute', ...] to be supported!
     return "hour";
   },
 },
@@ -55,10 +55,13 @@ value: {
 ### how to use
 
 ```
+import GridTimePicker from 'vue-grid-picker'
+
 <GridTimePicker
   :value="['14:00:00', '16:00:00']"
   :timeRange="['08:00:00', '19:00:00']"
   :disabledRanges="[{from: '10:00:00', to: '12:00:00'}]"
   @change="(selectedValue) => console.log(selectedValue)" 
 />
+
 ```
