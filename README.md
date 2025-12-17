@@ -3,11 +3,11 @@
 ## Time select by time range
 ![image](public/demo.jpg)
 
-![image](public/screenshot)
+![image](public/screenshot.png)
 
-![image](public/screenshot2)
+![image](public/screenshot2.png)
 
-![image](public/screenshot3)
+![image](public/screenshot3.png)
 
 ### props supported
 ```
