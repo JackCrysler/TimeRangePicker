@@ -1,7 +1,7 @@
 # GridPicker (Time Blocks) 
 
 ## Time select by time range
-![image]([public/demo.jpg](https://github.com/JackCrysler/TimeRangePicker/raw/main/public/demo.jpg))
+![image](https://github.com/JackCrysler/TimeRangePicker/raw/main/public/demo.jpg)
 
 ![image](public/screenshot.png)
 
