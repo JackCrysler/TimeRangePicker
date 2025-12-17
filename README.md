@@ -1,11 +1,13 @@
 # GridPicker (Time Blocks) 
 
 ## Time select by time range
-![image](public/screenshot.png)
+![image](public/demo.jpg)
 
-![image](public/screenshot2.png)
+![image](public/screenshot)
 
-![image](public/screenshot3.png)
+![image](public/screenshot2)
+
+![image](public/screenshot3)
 
 ### props supported
 ```
