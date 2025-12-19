@@ -19,7 +19,7 @@ export default {
   components: {
     TimeBlock,
   },
-  emits: ["update", "colInfo"],
+  emits: ["update", "colInfo", "blockClick"],
   props: {
     divide: {
       type: Number,

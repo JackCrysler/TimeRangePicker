@@ -1,7 +1,7 @@
 <template>
   <div class="grid-time-picker">
     <div><slot name="header"></slot></div>
-    <div class="time-grid">
+    <div class="time-grid content">
       <TimeColumn
         v-for="(col, idx) in columns"
         :divide="divide"
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed } from "vue";
 import TimeColumn from "./TimeColumn.vue";
 export default {
   components: {
@@ -72,11 +72,12 @@ export default {
       selected: [],
       SNs: {},
       current: null,
+      renderData: null,
     };
   },
   provide() {
     return {
-      eventBus: { listen: this.listen, broadcast: this.broadcast },
+      renderMsg: computed(() => this.renderData),
       disabledSNs: computed(() => this.disabledBlocks.flat()),
     };
   },
@@ -96,38 +97,32 @@ export default {
     },
     disabledBlocks() {
       if (Array.isArray(this.disabledRanges) && this.disabledRanges.length) {
-        const ret =  this.disabledRanges.map(({from, to}) => {
+        const ret = this.disabledRanges.map(({ from, to }) => {
           return this.rangeToList(this.getBlocksFromRange([from, to]));
-        })
-        return ret
+        });
+        return ret;
       }
-      return []
+      return [];
     },
   },
   watch: {
     value: {
       handler(cur) {
-        if (this.value.filter(it => it).length === 2) {
-          const initBlocks = this.getBlocksFromRange(this.value);
-          this.selected = initBlocks;
-          this.current = initBlocks[Math.floor(initBlocks.length / 2)];
-          const renderMsg = this.generateRender(initBlocks);
-          this.broadcast("update", renderMsg);
-        } else {
-          this.reset()
-        }
+        this.reRender()
       },
-      immediate: true
+      immediate: false,
     },
   },
   methods: {
-    listen(event, handler) {
-      const handlerList = this.events[event] || [];
-      handlerList.push(handler);
-      this.events[event] = handlerList;
-    },
-    broadcast(event, ...args) {
-      (this.events[event] || []).forEach((handler) => handler(...args));
+    reRender() {
+      if (this.value.filter((it) => it).length === 2) {
+      const initBlocks = this.getBlocksFromRange(this.value);
+      this.selected = initBlocks;
+      this.current = initBlocks[Math.floor(initBlocks.length / 2)];
+      this.renderData = this.generateRender(initBlocks);
+    } else {
+      this.reset();
+    }
     },
     collectColumns(cols) {
       cols.forEach((col) => {
@@ -175,15 +170,20 @@ export default {
       const end = blocks[1] || totalBlocks;
       const left = end - dValue + 1;
       const right = start + dValue - 1;
-      const border = [left < 0 ? 0 : left, right > totalBlocks ? totalBlocks : right];
-      const ret = this.disabledBlocks.length ? this.breakBorder(border) : border;
+      const border = [
+        left < 0 ? 0 : left,
+        right > totalBlocks ? totalBlocks : right,
+      ];
+      const ret = this.disabledBlocks.length
+        ? this.breakBorder(border)
+        : border;
       return ret;
     },
     breakBorder(selectable) {
       const disabledBks2D = [...this.disabledBlocks];
       const selectableBks = this.rangeToList(selectable);
       const currentSN = this.current;
-      
+
       const f = (disabledBks) => {
         const dbksLen = disabledBks.length;
         if (
@@ -198,15 +198,21 @@ export default {
             return [disabledBks[dbksLen - 1] + 1, selectable[1]];
           }
         }
-      }
+      };
 
-      const fragments = disabledBks2D.map(it => f(it)).filter(it => it).map(it=> this.rangeToList(it));
+      const fragments = disabledBks2D
+        .map((it) => f(it))
+        .filter((it) => it)
+        .map((it) => this.rangeToList(it));
       if (fragments.length) {
-        const o = (arr1, arr2) => arr1.filter(item => arr2.includes(item));
-        const overlaped = fragments.reduce((prev, next) => prev.length === 0 ? next : o(next, prev), [])
+        const o = (arr1, arr2) => arr1.filter((item) => arr2.includes(item));
+        const overlaped = fragments.reduce(
+          (prev, next) => (prev.length === 0 ? next : o(next, prev)),
+          []
+        );
         const ret = [overlaped[0], overlaped.pop()];
         // console.log('overlaped range', ret)
-        return ret
+        return ret;
       }
       return selectable;
     },
@@ -221,8 +227,7 @@ export default {
     reset() {
       this.selected = [];
       this.current = null;
-      const renderMsg = this.generateRender([]);
-      this.broadcast("update", renderMsg);
+      this.renderData = this.generateRender([]);
     },
     updatePicker(info) {
       const { sn } = info;
@@ -236,10 +241,12 @@ export default {
       this.selected = blocks;
       this.current = sn;
 
-      const renderMsg = this.generateRender(blocks);
-      this.broadcast("update", renderMsg);
+      this.renderData = this.generateRender(blocks);
 
-      const pickerValue = blocks.length === 2 ? [this.SNs[blocks[0]][0], this.SNs[blocks[1]][1]] : [];
+      const pickerValue =
+        blocks.length === 2
+          ? [this.SNs[blocks[0]][0], this.SNs[blocks[1]][1]]
+          : [];
       this.$emit("change", pickerValue);
     },
     rangeToList(range, cb) {
@@ -270,7 +277,8 @@ export default {
       const [hour, minute, second] = from.split(":");
       const [toHour, toMinute, toSecond] = to.split(":");
       const diffSeconds =
-        this.toSeconds(toHour, toMinute, toSecond) - this.toSeconds(hour, minute, second);
+        this.toSeconds(toHour, toMinute, toSecond) -
+        this.toSeconds(hour, minute, second);
       return this.fromSeconds(diffSeconds);
     },
     toSeconds(hours, minutes, seconds) {
@@ -286,12 +294,14 @@ export default {
       return arr1.some((item) => arr2.includes(item));
     },
   },
+  mounted() {
+    this.reRender()
+  }
 };
 </script>
 
 <style scoped>
 .grid-time-picker {
-  
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -305,14 +315,38 @@ export default {
   gap: 8px;
 
   overflow: auto;
-  
 }
+
 .cover {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 1;
-  }
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.content::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: #f8f9fa94;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #e1e8ed9d; /* 更浅的淡蓝灰，适配浅色主题 */
+  border-radius: 2px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #c4ccd883;
+}
+
+/* Firefox 容器级适配（需单独写） */
+.content {
+  scrollbar-width: thin;
+  scrollbar-color: #e1e8ed #f8f9fa;
+}
 </style>

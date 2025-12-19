@@ -27,7 +27,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["click"]);
-const eventBus = inject("eventBus");
+const renderMsg = inject("renderMsg");
 const disabledSN = inject("disabledSNs");
 const pattern = ref(1); // 0: disabled  1: default  2: active
 
@@ -35,13 +35,13 @@ watch(disabledSN, () => {
   pattern.value = +(!disabledSN.value.includes(props.sn));
 })
 
-eventBus.listen("update", (renderMsg) => {
-  const { border, actived } = renderMsg;
+watch(renderMsg, () => {
+  const { border, actived } = renderMsg.value;
   const sn = props.sn;
 
   // 没有选择时，重置状态
   if (actived.length === 0) {
-    pattern.value = +(!disabledSN.value.includes(props.sn));
+    pattern.value = +(!disabledSN.value.includes(sn));
     return;
   }
 
@@ -49,9 +49,10 @@ eventBus.listen("update", (renderMsg) => {
   pattern.value = +border.includes(sn);
   // 已选范围(2)
   actived.includes(sn) && (pattern.value = 2);
-
+  // 禁用范围
   disabledSN.value.includes(sn) && (pattern.value = 0);
-});
+})
+
 </script>
 
 <style scoped>
